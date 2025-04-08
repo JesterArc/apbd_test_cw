@@ -166,5 +166,6 @@ public class AdvancedEmpDeptTests
         
         Assert.Contains(result, r => r.EName == "ALLEN" && r.DName == "SALES" && r.Grade == 3);
         Assert.Contains(result, r => r.EName == "KING" && r.DName == "ACCOUNTING" && r.Grade == 5);
+        Assert.DoesNotContain(result, r => r.EName == "KING" && r.DName == "ACCOUNTING" && r.Grade != 5);
     }
 }
