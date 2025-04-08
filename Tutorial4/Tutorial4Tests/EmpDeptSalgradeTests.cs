@@ -66,7 +66,7 @@ public class EmpDeptSalgradeTests
         var emps = Database.GetEmps();
 
         var result = emps
-            .Select(e => (e.EName, e.Sal))
+            .Select(e => new {e.EName, e.Sal})
             .ToList();
         
         Assert.All(result, r =>
@@ -85,7 +85,8 @@ public class EmpDeptSalgradeTests
         var depts = Database.GetDepts();
 
         var result = emps
-            .Join(depts, e => e.DeptNo, e => e.DeptNo, (e, d) => new {e.EName, d.DName})
+            .Join(depts, e => e.DeptNo, e => e.DeptNo, 
+                (e, d) => new {e.EName, d.DName})
             .ToList();
 
         Assert.Contains(result, r => r.DName == "SALES" && r.EName == "ALLEN");
@@ -117,7 +118,7 @@ public class EmpDeptSalgradeTests
 
         var result = emps
             .Where(e => e.Comm != null)
-            .Select(e => (e.EName, e.Comm))
+            .Select(e => new {e.EName, e.Comm})
             .ToList();
         
         Assert.All(result, r => Assert.NotNull(r.Comm));
@@ -134,7 +135,7 @@ public class EmpDeptSalgradeTests
         var result = emps
             .Join(grades, e => true, g => true, (emp, sal) => new {emp, sal})
             .Where(both => both.emp.Sal >= both.sal.Losal && both.emp.Sal <= both.sal.Hisal)
-            .Select(both => (both.emp.EName, both.sal.Grade))
+            .Select(both => new {both.emp.EName, both.sal.Grade})
             .ToList();
         
         Assert.Contains(result, r => r.EName == "ALLEN" && r.Grade == 3);
@@ -153,6 +154,7 @@ public class EmpDeptSalgradeTests
             .ToList();
         
         Assert.Contains(result, r => r.DeptNo == 30 && r.AvgSal > 1000);
+        Assert.Contains(result, r => r.DeptNo == 10 && r.AvgSal == 5000);
     }
 
     // 10. Complex filter with subquery and join
@@ -168,5 +170,6 @@ public class EmpDeptSalgradeTests
             .ToList(); 
         
         Assert.Contains("ALLEN", result);
+        Assert.DoesNotContain("WARD", result);
     }
 }

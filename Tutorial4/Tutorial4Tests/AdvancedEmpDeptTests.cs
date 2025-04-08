@@ -81,6 +81,9 @@ public class AdvancedEmpDeptTests
         Assert.Contains("PRESIDENT", jobs);
         Assert.Contains("SALESMAN", jobs);
         Assert.Contains("CLERK", jobs);
+        Assert.Single(jobs, r => r == "PRESIDENT");
+        Assert.Single(jobs, r => r == "SALESMAN");
+        Assert.Single(jobs, r => r == "CLERK");
     }
 
     // 15. Employees with managers (NOT NULL Mgr)
@@ -130,6 +133,7 @@ public class AdvancedEmpDeptTests
             (e, em) => new {Employee = e.EName, Manager = em.EName}).ToList();
         
         Assert.Contains(result, r => r.Employee == "SMITH" && r.Manager == "FORD");
+        Assert.DoesNotContain(result, r => r.Employee == "KING" || r.Manager == "WARD");
     }
 
     // 19. Let clause usage (sal + comm)
